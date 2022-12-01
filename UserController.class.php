@@ -28,7 +28,7 @@ class UserController extends Controller
             is_null($email) ||
             is_null($password)
         ) {
-            response(false, "Lütfen boş bırakmayınız", false);
+            response(false, "Please do not leave blank", false);
         }
 
         if (isset($tc)) {
@@ -41,7 +41,7 @@ class UserController extends Controller
             if (substr($say, -1) != substr($tc, -1)) {
                 response(
                     false,
-                    "Girmiş Olduğunuz TC Kimlik Numarası Yanlıştır.",
+                    "The ID Number You Have Entered Is Incorrect.",
                     false
                 );
             }
@@ -53,7 +53,7 @@ class UserController extends Controller
         if (Count($check) > 0) {
             response(
                 false,
-                "Bu TC Kimlik Numarası İle Daha Önce Kayıt Yapılmış.",
+                "This ID Number Has Been Registered Before.",
                 false
             );
         }
@@ -65,7 +65,7 @@ class UserController extends Controller
         ) {
             response(
                 false,
-                "Lütfen en az bir tane küçük/büyük harf ve rakam giriniz",
+                "Please enter at least one lower/uppercase letter and number",
                 false
             );
         }
@@ -89,7 +89,7 @@ class UserController extends Controller
             "type" => "1",
         ];
         $kullanici->addAll($dataList);
-        response(true, "Kayıt yapıldı.", true);
+        response(true, "Recorded", true);
     }
     public function login()
     {
@@ -110,17 +110,17 @@ class UserController extends Controller
             // var_dump($check);
             // die();
         if (count($check) == 0) {
-            response(false, "TC Kimlik Numarası veya Şifre Yanlış", false);
+            response(false, "ID Number or Password Incorrect", false);
         }
         if($check[0]["banned"] == 1) {
           response(false, 
-                "Hesabınız erişime kapalıdır.",
+                "Your account is inaccessible.",
                   false);
         }
         Session("ID", $check[0]["id"]);
         var_dump(session("ID"));
         {
-            response(true, "Hoşgeldiniz.", true);
+            response(true,"Welcome!", true);
         }
 
 
@@ -139,9 +139,9 @@ class UserController extends Controller
             ->select();
 
         if (count($check) == 0) {
-            response(false, "Randevunuz Bulunmamaktadır.", false);
+            response(false, "You do not have an appointment.", false);
         } else {
-            response($check, "Randevunuzlarınız var .", true);
+            response($check, "You have an appointment.", true);
         }
     }
     public function randevual()
@@ -192,7 +192,7 @@ class UserController extends Controller
         if (count($datalist) == 0) {
             response(false, "Hata oluştu", false);
         } else {
-            response(true, "Randevunuz Başarıyla kaydedildi.", true);
+            response(true, "Your appointment has been successfully registered.", true);
         }
     }
     public function randevuiptal()
@@ -207,7 +207,7 @@ class UserController extends Controller
                 ->delete();
 
             if (count($iptal) == 1) {
-                response($iptal, "Randevu İptal edildi.", true);
+                response($iptal, "Appointment Canceled.", true);
             }      
     }
     public function logout(){

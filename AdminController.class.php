@@ -6,7 +6,7 @@ use PhpMyAdmin\SqlParser\Components\Condition;
 
 class AdminController extends Controller
 {
-    public function kayit()
+    public function Register()
     {
         $json = file_get_contents("php://input");
         $data = json_decode($json);
@@ -64,7 +64,7 @@ class AdminController extends Controller
             response( $_SESSION["ID"], "Hoşgeldiniz",true);
         }
     }
-    public function sifredegistir()
+    public function change Password()
     { 
         $json = file_get_contents("php://input");
         $data = json_decode($json);
@@ -90,7 +90,7 @@ class AdminController extends Controller
             
         }
     }
-    public function doktorekle()
+    public function add doctor()
     {
         $json = file_get_contents("php://input");
         $data = json_decode($json);
@@ -106,13 +106,13 @@ class AdminController extends Controller
             is_null($email) ||
             is_null($password)
         ) {
-            response(false, "Lütfen boş bırakmayınız", false);
+            response(false, "Please do not leave blank", false);
         }
         $doktorekle = M("kullanici")
             ->where(["email" => $email])
             ->find();
         if (Count($doktorekle) > 0) {
-            response(false, "Bu email ile Daha Önce Kayıt Yapılmış.", false);
+            response(false, "This email has already been registered.", false);
         }
 
         $admin = M("kullanici");
@@ -124,7 +124,7 @@ class AdminController extends Controller
             "type" => "2",
         ];
         $admin->addAll($dataList);
-        response(true, "Doktor Paneline Başarıyla Kayıt yapıldı.", true);
+        response(true, "Successfully Registered to the Physician Panel.", true);
     }
 
     public function doktorsil()
@@ -144,7 +144,7 @@ class AdminController extends Controller
                 ->delete();
 
             if (count($check) == 1) {
-                response($check, "Doktor başarıyla silindi", true);
+                response($check, "Doctor deleted successfully", true);
             }
         }
     }
@@ -162,9 +162,9 @@ class AdminController extends Controller
         ->select();
     
         if (count($check) == 0) {
-            response(false, "Listelenecek Doktor Bulunmamaktadır.", false);
+            response(false, "There Is No Doctor To List.", false);
         } else {
-            response($check, "Doktor listesi aşağıdadır", true);
+            response($check, "Below is the list of doctors", true);
         }
     }
     public function logout(){

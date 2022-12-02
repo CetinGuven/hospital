@@ -7,7 +7,7 @@ use IsaEken\PhpTcKimlik\PhpTcKimlik;
 
 class UserController extends Controller
 {
-    public function kayit()
+    public function Register()
     {
         $json = file_get_contents("php://input");
         $data = json_decode($json);
@@ -125,7 +125,7 @@ class UserController extends Controller
 
 
     }  
-    public function randevularim()
+    public function my appointments()
    {
 
         $json = file_get_contents("php://input");
@@ -144,7 +144,7 @@ class UserController extends Controller
             response($check, "You have an appointment.", true);
         }
     }
-    public function randevual()
+    public function make an appointment()
     {
 
         $json = file_get_contents("php://input");
@@ -195,7 +195,7 @@ class UserController extends Controller
             response(true, "Your appointment has been successfully registered.", true);
         }
     }
-    public function randevuiptal()
+    public function cancel appointment()
     {
         $json = file_get_contents("php://input");
         $data = json_decode($json);

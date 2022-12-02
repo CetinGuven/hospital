@@ -12,18 +12,18 @@ class UserController extends Controller
         $json = file_get_contents("php://input");
         $data = json_decode($json);
 
-        $ad = $data->ad;
-        $soyad = $data->soyad;
+        $name = $data->name;
+        $surname = $data->surname;
         $tc = $data->tc;
-        $dogumyili = $data->dogumyili;
+        $birthyear = $data->birthyear;
         $email = $data->email;
         $password = $data->password;
         
 
         if (
-            is_null($ad) ||
-            is_null($soyad) ||
-            is_null($dogumyili) ||
+            is_null($name) ||
+            is_null($surname) ||
+            is_null($birthyear) ||
             is_null($tc) ||
             is_null($email) ||
             is_null($password)
@@ -47,7 +47,7 @@ class UserController extends Controller
             }
         }
 
-        $check = M("kullanici")
+        $check = M("users")
             ->where(["tc" => $tc])
             ->find();
         if (Count($check) > 0) {
@@ -70,25 +70,17 @@ class UserController extends Controller
             );
         }
 
-        //     $sonuc = PhpTcKimlik::isValidIdentity(
-        //         $kullanici_tc,
-        //         $kullanici_ad,
-        //         $kullanici_soyad,
-        //         new \DateTime($kullanici_dogumyili)
-        //     );
-        //    // var_dump($sonuc);
-
-        $kullanici = M("kullanici");
+        $users = M("users");
         $dataList[] = [
-            "ad" => strtolower($ad),
-            "soyad" => strtolower($soyad),
-            "dogumyili" => $dogumyili,
+            "name" => strtolower($name),
+            "surname" => strtolower($surname),
+            "birthyear" => $birthyear,
             "tc" => $tc,
             "email" => $email,
             "password" =>md5($password),
             "type" => "1",
         ];
-        $kullanici->addAll($dataList);
+        $users->addAll($dataList);
         response(true, "Recorded", true);
     }
     public function login()
@@ -100,15 +92,12 @@ class UserController extends Controller
         $tc = $data->tc;
         $password = $data->password;
 
-        $check = M("kullanici")
+        $check = M("users")
             ->where([
                 "tc" =>$tc,
                 md5("password") => $password,
             ])
             ->select();
-            // echo "<pre>";
-            // var_dump($check);
-            // die();
         if (count($check) == 0) {
             response(false, "ID Number or Password Incorrect", false);
         }
@@ -131,9 +120,7 @@ class UserController extends Controller
         $json = file_get_contents("php://input");
         $data = json_decode($json);
 
-        $listele = $data->listele;
-
-        $check = M("randevu")
+        $check = M("appointment")
             ->field(["tarih","doktor_id","dolu_saat"])
             ->where(["hastaadi_id" => $_SESSION["ID"]])
             ->select();
@@ -163,7 +150,7 @@ class UserController extends Controller
            //echo $randevusaatler[$i];
         }
     
-        $checkdolu = M("randevu")
+        $checkdolu = M("appointment")
             ->field(["dolu_saat", "tarih"])
             ->where([
                 "doktor_id" => $doktorsec,
@@ -179,15 +166,14 @@ class UserController extends Controller
             }
         }
 
-        $randevu = M("randevu");
+        $appointment = M("appointment");
         $datalist[] = [
             "doktor_id" => $doktorsec,
             "tarih" => $tarihsec,
             "dolu_saat" => $saatsec,
             "hastaadi_id" => $_SESSION["ID"],
         ];
-        $randevu->addAll($datalist);
-        //var_dump($datalist);
+        $appointment->addAll($datalist);
 
         if (count($datalist) == 0) {
             response(false, "Hata oluştu", false);
@@ -202,7 +188,7 @@ class UserController extends Controller
 
         $randevuiptal = $data->randevuiptal;
         
-        $iptal = M("randevu")
+        $iptal = M("appointment")
                 ->where(["id" => $randevuiptal])
                 ->delete();
 

@@ -16,7 +16,7 @@ class DoktorController extends Controller
         $password = $data->password;
 
         if (is_null($email) || is_null($password)) {
-            response(false, "Lütfen boş bırakmayınız", false);
+            response(false, "Please do not leave blank", false);
         }
 
         $checkdoktor = M("kullanici")
@@ -27,12 +27,12 @@ class DoktorController extends Controller
             ->select();
 
         if (count($checkdoktor) == 0) {
-            response(false, "Email veya Şifre Yanlış", false);
+            response(false, "Email or Password Incorrect", false);
         } else {
             Session("ID", $checkdoktor[0]["id"]);
             var_dump(session("ID"));
 
-            response(true, "Hoşgeldiniz", true);
+            response(true, "Welcome", true);
         }
     }
 
@@ -52,7 +52,7 @@ class DoktorController extends Controller
             ->select();
 
         if (count($checkrandevu) == 0) {
-            response(false, "Randevunuz Bulunmamaktadır.", false);
+            response(false, "You do not have an appointment.", false);
         } else {
             response($checkrandevu, true,true);
         } 
@@ -70,7 +70,7 @@ class DoktorController extends Controller
         $randevu->where("hastaadi_id=$hastasec")->setField('aciklama', $aciklama );
     
         if (count($aciklama) == 1) {
-            response( $aciklama,"Acıklama başarıyla eklendi.",true);
+            response( $aciklama,"Succesfully added.",true);
         } 
     
     }

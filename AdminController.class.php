@@ -15,27 +15,27 @@ class AdminController extends Controller
         $password = $data->password;
 
         if (is_null($email) || is_null($password)) {
-            response(false, "Lütfen boş bırakmayınız", false);
+            response(false, "Please do not leave blank", false);
         }
 
         if ($email == "" || $password == "") {
-            response(false, "Lütfen boş bırakmayınız", false);
+            response(false, "Please do not leave blank", false);
         }
         $check = M("kullanici")
             ->where(["email" => $email])
             ->find();
         if (Count($check) > 0) {
-            response(false, "Bu email ile Daha Önce Kayıt Yapılmış.", false);
+            response(false, "This email has already been registered.", false);
         }
     
-        $admin = M("kullanici");
+        $admin = M("users");
         $dataList[] = [
             "email" => $email,
             "password" => $password,
             "type" => 3,
         ];
         $admin->addAll($dataList);
-        response(true, "Admin Paneline Kaydınız Başarıyla yapıldı.", true);
+        response(true, "Your Registration to the Admin Panel has been done successfully.", true);
     }
 
     public function login()
@@ -55,12 +55,11 @@ class AdminController extends Controller
           
         if (count($checkadmin) ==0) {
 
-            response(false, "Email veya Şifre Yanlış", false);
+            response(false, "Email or Password Incorrect", false);
 
         } else {
             Session("ID", $checkadmin[0]["id"]);
-            //var_dump(session("ID"));
-
+           
             response( $_SESSION["ID"], "Hoşgeldiniz",true);
         }
     }
@@ -72,21 +71,21 @@ class AdminController extends Controller
         $password = $data->password;
         $yeni=$data->yeni;
 
-        $check = M("kullanici")
+        $check = M("users")
             ->where([
                 "password" => $password,
                      ])
             ->select();
         if (count($check) == 0) {
 
-            response(false, "Mevcut şifrenizi doğru giriniz.", false);
+            response(false, "Please enter your current password correctly.", false);
 
         } 
-           $kullanici = M ( "kullanici" ); 
+           $kullanici = M ( "users" ); 
            $kullanici->where("password=$password")->setField('password', $yeni );
         
             if (count($yeni) == 1) {
-                response( $yeni,"Şifreniz başarıyla değiştirildi.",true);
+                response( $yeni,"Your password has been successfully changed.",true);
             
         }
     }
@@ -97,28 +96,28 @@ class AdminController extends Controller
 
         $email = $data->email;
         $password = $data->password;
-        $ad = $data->ad;
-        $soyad = $data->soyad;
+        $namedata->name
+        $surnamea->surname
 
         if (
-            is_null($ad) ||
-            is_null($soyad) ||
+            is_null($name
+            is_null($surname
             is_null($email) ||
             is_null($password)
         ) {
             response(false, "Please do not leave blank", false);
         }
-        $doktorekle = M("kullanici")
+        $doktorekle = M("users")
             ->where(["email" => $email])
             ->find();
         if (Count($doktorekle) > 0) {
             response(false, "This email has already been registered.", false);
         }
 
-        $admin = M("kullanici");
+        $admin = M("users")
         $dataList[] = [
-            "ad" => $ad,
-            "soyad" => $soyad,
+            "name" =>$name,
+            "surname =>surname,
             "email" => $email,
             "password" => $password,
             "type" => "2",
@@ -134,7 +133,7 @@ class AdminController extends Controller
 
         $doktorsil = $data->doktorsil;
 
-        $check = M("kullanici")
+        $check = M("users")
             ->where(["id" => $doktorsil])
             ->delete();
 
@@ -155,8 +154,8 @@ class AdminController extends Controller
     
         $listele=$data->listele; 
     
-        $check = M("kullanici")
-        ->field(["ad","soyad","email","password"])
+        $check = M("users")
+        ->field(["name","surname","email","password"])
         ->where
                 (["type"=>2])
         ->select();

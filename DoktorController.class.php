@@ -19,7 +19,7 @@ class DoktorController extends Controller
             response(false, "Please do not leave blank", false);
         }
 
-        $checkdoktor = M("kullanici")
+        $checkdoktor = M("users")
             ->where([
                 "email" => $email,
                 "password" => $password,
@@ -44,7 +44,7 @@ class DoktorController extends Controller
 
         $randevugör=$data->randevugör;
 
-        $checkrandevu = M("randevu")
+        $checkrandevu = M("appointment")
             ->field(["tarih","dolu_saat","hastaadi_id","aciklama"])
             ->where([
               "doktor_id"=>$_SESSION["ID"]
@@ -66,7 +66,7 @@ class DoktorController extends Controller
         $hastasec=$data->hastasec;
         $aciklama=$data->aciklama;
        
-        $randevu = M("randevu"); 
+        $randevu = M("appointment"); 
         $randevu->where("hastaadi_id=$hastasec")->setField('aciklama', $aciklama );
     
         if (count($aciklama) == 1) {

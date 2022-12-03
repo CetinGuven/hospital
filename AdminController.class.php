@@ -21,7 +21,7 @@ class AdminController extends Controller
         if ($email == "" || $password == "") {
             response(false, "Please do not leave blank", false);
         }
-        $check = M("kullanici")
+        $check = M("users")
             ->where(["email" => $email])
             ->find();
         if (Count($check) > 0) {
@@ -46,7 +46,7 @@ class AdminController extends Controller
         $email = $data->email;
         $password = $data->password;
         
-        $checkadmin = M("kullanici")
+        $checkadmin = M("users")
             ->where([
               'email' => $email,
               'password' => $password,

@@ -121,8 +121,8 @@ class UserController extends Controller
         $data = json_decode($json);
 
         $check = M("appointment")
-            ->field(["tarih","doktor_id","dolu_saat"])
-            ->where(["hastaadi_id" => $_SESSION["ID"]])
+            ->field(["date","doctor_id","full_hour"])
+            ->where(["patientname_id" => $_SESSION["ID"]])
             ->select();
 
         if (count($check) == 0) {
@@ -137,40 +137,40 @@ class UserController extends Controller
         $json = file_get_contents("php://input");
         $data = json_decode($json);
 
-        $doktorsec = $data->doktorsec;
-        $tarihsec = $data->tarihsec;
-        $saatsec = $data->saatsec;
+        $choosedoctor = $data->choosedoctorc;
+        $choosedate = $data->choosedate;
+        $choosehour = $data->choosehour;
 
-        $randevusaatleri=array();
+        $appointmenthours=array();
 
         for($i=9;$i<=17;$i++){
-            $randevusaatler[]=$i.":00:00<br>";
+            $appointmenthours[]=$i.":00:00<br>";
         }
-        for($i=0;$i<count($randevusaatler);$i++){
-           //echo $randevusaatler[$i];
+        for($i=0;$i<count($appointmenthours);$i++){
+           //echo $appointmenthours[$i];
         }
     
         $checkdolu = M("appointment")
-            ->field(["dolu_saat", "tarih"])
+            ->field(["full_hour", "date"])
             ->where([
-                "doktor_id" => $doktorsec,
-                "tarih" => $tarihsec,
+                "doctor_id" =>$choosedoctor,
+                "date" =>$choosedate ,
             ])
             ->select();
 
         foreach ($checkdolu as $Key => $Element) {
-            if (in_array($Element["dolu_saat"], $randevusaatleri)) {
-                $randevusaatleri = array_diff($randevusaatleri, [
-                    $Element["dolu_saat"],
+            if (in_array($Element["full_hour"], $appointmenthours)) {
+                $appointmenthours = array_diff($appointmenthours, [
+                    $Element["full_hour"],
                 ]);
             }
         }
 
         $appointment = M("appointment");
         $datalist[] = [
-            "doktor_id" => $doktorsec,
-            "tarih" => $tarihsec,
-            "dolu_saat" => $saatsec,
+            "doctor_id" =>  $choosedoctor,
+            "date" =>  $choosedate,
+            "full_hour" =>  $choosehour,
             "hastaadi_id" => $_SESSION["ID"],
         ];
         $appointment->addAll($datalist);

@@ -81,11 +81,11 @@ class AdminController extends Controller
             response(false, "Please enter your current password correctly.", false);
 
         } 
-           $kullanici = M ( "users" ); 
-           $kullanici->where("password=$password")->setField('password', $yeni );
+           $users = M ( "users" ); 
+           $users->where("password=$password")->setField('password', $new );
         
-            if (count($yeni) == 1) {
-                response( $yeni,"Your password has been successfully changed.",true);
+            if (count($new) == 1) {
+                response( $new,"Your password has been successfully changed.",true);
             
         }
     }
@@ -107,10 +107,10 @@ class AdminController extends Controller
         ) {
             response(false, "Please do not leave blank", false);
         }
-        $doktorekle = M("users")
+        $adddoctor = M("users")
             ->where(["email" => $email])
             ->find();
-        if (Count($doktorekle) > 0) {
+        if (Count($adddoctor) > 0) {
             response(false, "This email has already been registered.", false);
         }
 
@@ -126,19 +126,19 @@ class AdminController extends Controller
         response(true, "Successfully Registered to the Physician Panel.", true);
     }
 
-    public function doktorsil()
+    public function deletedoctor()
     {
         $json = file_get_contents("php://input");
         $data = json_decode($json);
 
-        $doktorsil = $data->doktorsil;
+        $doktorsil = $data-> deletedoctor;
 
         $check = M("users")
-            ->where(["id" => $doktorsil])
+            ->where(["id" => $deletedoctor])
             ->delete();
 
         if (count($check) == 1) {
-            $check = M("randevu")
+            $check = M("appoinment")
                 ->where(["doktor_id" => $doktorsil])
                 ->delete();
 
